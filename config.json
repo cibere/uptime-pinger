@@ -1,0 +1,19 @@
+{
+    "websites" : [
+        {"name" : "Google", "url" : "https://www.google.com/ping"},
+    ],
+    "webhook_url" : "...",
+    "ignore_ssl" : "True",
+    "embed_format" : [
+        {
+            "title" : "Uptime Alert",
+            "description" : "{website} is now **online**\nIt was offline for {time}",
+            "color" : 65292
+        },
+        {
+            "title" : "Downtime Alert",
+            "description" : "{website} is now **offline**",
+            "color" : 16711680
+        }
+    ]
+}
