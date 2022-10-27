@@ -1,5 +1,4 @@
 import logging, logging.handlers
-from colorama import Fore
 
 def setup_logging():
     logger = logging.getLogger('uptime')
@@ -16,7 +15,7 @@ def setup_logging():
 
         FORMATS = {
             level: logging.Formatter(
-                f'\x1b[30;1m%(asctime)s\x1b[0m {colour}%(levelname)-8s\x1b[0m \x1b{Fore.YELLOW}%(name)s\x1b[0m %(message)s',
+                f'\x1b[30;1m%(asctime)s\x1b[0m {colour}%(levelname)-8s\x1b[0m \x1b[33m%(name)s\x1b[0m %(message)s',
                 '%Y-%m-%d %H:%M:%S',
             )
             for level, colour in LEVEL_COLOURS
