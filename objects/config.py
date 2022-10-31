@@ -2,6 +2,7 @@ import json
 import errors
 import asyncio
 from .website import Website
+import copy
 
 default_embeds = [
     {
@@ -26,6 +27,11 @@ class Config:
         self.often = None
         
         self._embeds = default_embeds
+    
+    def get_embed(self, /, _type: int):
+        if _type not in [0, 1]:
+            raise errors.UnknownEmbedType(_type)
+        return copy.copy(self._embeds[_type])
     
     async def wait(self):
         await asyncio.sleep(self.often)
