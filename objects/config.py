@@ -25,6 +25,7 @@ class Config:
         self.raw_websites = []
         self.webhook_url = None
         self.often = None
+        self.timeout = 15
         
         self._embeds = default_embeds
     
@@ -49,6 +50,7 @@ class Config:
             self.raw_websites = config['websites']
             self.webhook_url = config['webhook_url']
             self.often = config.get("often", 30)
+            self.timeout = config.get("timeout", 15)
             self.ignore_ssl = bool(config.get("ignore_ssl", False))
             self._embeds = config.get("embed_format", default_embeds)
         except FileNotFoundError:

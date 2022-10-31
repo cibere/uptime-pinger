@@ -11,7 +11,7 @@ config = objects.Config()
 config.reload_config()
 
 async def main():
-    async with aiohttp.ClientSession() as cs:
+    async with aiohttp.ClientSession(timeout=config.timeout) as cs:
         while True:
             for website in config.websites:
                 logger.info(f"Checking {website.name}...")
