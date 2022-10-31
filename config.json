@@ -4,6 +4,8 @@
     ],
     "webhook_url" : "...",
     "ignore_ssl" : "True",
+    "timeout" : 30,
+    "often" : 30,
     "embed_format" : [
         {
             "title" : "Uptime Alert",
