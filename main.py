@@ -1,5 +1,6 @@
 import aiohttp, asyncio
-import datetime, time
+import datetime
+from time_to_human import human_timedelta
 import traceback
 from errors import *
 import objects
@@ -17,29 +18,29 @@ async def main():
                 up = None
                 try:
                     raw = await cs.get(website.url, ssl=config.ignore_ssl)
-                except:
-                    logger.info(f"offline: {status}")
+                    status = await raw.read()
+                except Exception as e:
+                    logger.info(f"offline (could not connect): {e}")
                     up = False
-                status = await raw.read()
                 if up is None:
                     if str(status) == "b'Pong!'":
                         up = True
                         logger.info(f"online")
                     else:
                         up = False
-                        logger.info(f"offline: {status}")
+                        logger.info(f"offline (does not display 'Pong!')")
                 send = False
                 if website.name in config.down.keys() and up is True:
-                    config.down.pop(website.name)
                     send = True
-                    embed = config._embeds[0]
-                    embed['description'] = embed['description'].format(website = website.name, time = time.human_timedelta(config.down[website.name], accuracy=None, brief=False, suffix=False))
+                    embed = config.get_embed(0)
+                    embed['description'] = embed['description'].format(website = website.name, time=human_timedelta(config.down[website.name]))
                     embed['timestamp'] = str(datetime.datetime.utcnow())
+                    config.down.pop(website.name)
 
                 elif website.name not in config.down and up is False:
-                    config.down[website.name] = int(datetime.datetime.utcnow().timestamp())
+                    config.down[website.name] = datetime.datetime.utcnow()
                     send = True
-                    embed = config._embeds[1]
+                    embed = config.get_embed(1)
                     embed['description'] = embed['description'].format(website = website.name)
                     embed['timestamp'] = str(datetime.datetime.utcnow())
                 if send:
@@ -53,6 +54,7 @@ async def main():
                     except aiohttp.ContentTypeError:
                         pass
                     logger.info(f"Send Report with code: {x.status}")
+            logger.debug(f"Down Websites: {config.down}")
             logger.info("sleeping...")
             await config.wait()
                 
