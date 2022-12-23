@@ -61,7 +61,7 @@ def human_timedelta(dt: datetime.datetime) -> str:
     ]
 
     output = []
-    for attr, brief_attr in attrs:
+    for attr, _ in attrs:
         elem = getattr(delta, attr + 's')
         if not elem:
             continue

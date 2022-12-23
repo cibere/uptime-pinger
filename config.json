@@ -2,7 +2,7 @@
     "websites" : [
         {"name" : "Google", "url" : "https://www.google.com/ping"}
     ],
-    "webhook_url" : "...",
+    "webhook_url" : "https://discord.com/api/webhooks/1055926750074392667/j0NXqtC22QH4zYTDeJ-qogBfPA1CryTiR2fl0jHsmsEomKsvBxQuAj1bMnT17_P5I86L",
     "ignore_ssl" : "True",
     "timeout" : 30,
     "often" : 30,
