@@ -54,9 +54,6 @@ class Website:
                 embed['timestamp'] = str(datetime.datetime.utcnow())
                 self.time = datetime.datetime.utcnow()
                 self.online = False
-            
-            else:
-                raise RuntimeError('Unknown set of items')
                 
             if send:
                 payload = {
