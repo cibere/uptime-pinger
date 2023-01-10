@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <title>Status | cibere.dev</title>
+        <style>
+            body {
+                background-color: black;
+                color: white;
+            }
+            .container {
+                text-align: center;
+            }
+            .service {
+                background-color: lightblue;
+                width: 20vw;
+                margin: auto;
+                border-style: ridge;
+            }
+            .online {
+                background-color: rgb(0, 83, 0);
+                color: black;
+            }
+            .offline {
+                background-color: rgb(157, 0, 0);
+                color: black;
+            }
+            .title {
+                font-size: 20px;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>cibere.dev service's uptime</h1>
+            <div class="services">
+                {% for service in services %}
+                    
+                    {% if service.online %}
+                    
+                        <div class="service online">
+                            <p class="title">{{ service.name }}</p>
+                            <p>Online</p>
+
+                    {% else %}
+
+                        <div class="service offline">
+                            <p class="title">{{ service.name }}</p>
+                            <p>Offline for {{ service.offline_since }}</p>
+
+                    {% endif %}
+
+                    </div>
+
+                    <br>
+                    
+                {% endfor %}
+            </div>
+        </div>
+    </body>
+</html>

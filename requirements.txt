@@ -1,2 +1,4 @@
 aiohttp
 python-dateutil
+starlette
+uvicorn
