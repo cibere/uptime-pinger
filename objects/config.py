@@ -1,6 +1,7 @@
 import copy
 import json
 import logging
+from typing import Optional
 
 import errors
 
@@ -23,11 +24,14 @@ default_embeds = [
 
 
 class Config:
+    websites: list[Website]
+    timeout: int
+    webhook_url: Optional[str]
+    often: Optional[int]
+
     def __init__(self):
-        # {'name' : datetime.datetime obj}
-        self.down = {}
         self.websites = []
-        self.raw_websites = []
+        self._raw_websites = []
         self.webhook_url = None
         self.often = None
         self.timeout = 15
@@ -41,7 +45,7 @@ class Config:
 
     def reload_website_cache(self):
         websites = []
-        for website in self.raw_websites:
+        for website in self._raw_websites:
             try:
                 wait = int(website["wait"])
             except:
@@ -50,15 +54,26 @@ class Config:
                 ignore_ssl = bool(website["ignore_ssl"])
             except:
                 ignore_ssl = self.ignore_ssl
+            try:
+                links = website["links"]
+            except KeyError:
+                links = []
+            try:
+                hidden = bool(website["hidden"])
+            except KeyError or ValueError:
+                hidden = False
 
             websites.append(
                 Website(
-                    website["name"],
-                    website["url"],
+                    name=website["name"],
+                    url=website["url"],
                     wait=wait,
                     webhook_url=str(website.get("webhook_url") or self.webhook_url),
                     ignore_ssl=ignore_ssl,
                     _config=self,
+                    links=links,
+                    description=website["description"],
+                    hidden=hidden,
                 )
             )
         self.websites = websites
@@ -68,7 +83,7 @@ class Config:
             with open("config.json", "r") as f:
                 config = json.load(f)
 
-            self.raw_websites = config["websites"]
+            self._raw_websites = config["websites"]
             self.webhook_url = config["webhook_url"]
             self.often = config.get("often", 30)
             self.timeout = config.get("timeout", 15)
@@ -79,5 +94,5 @@ class Config:
             raise errors.ConfigNotFound()
         except (json.decoder.JSONDecodeError, KeyError):
             raise errors.UnknownConfigFormat(config)  # type: ignore
-        if self.raw_websites:
+        if self._raw_websites:
             self.reload_website_cache()

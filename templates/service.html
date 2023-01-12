@@ -1,0 +1,74 @@
+<html>
+    <head>
+        <title>{{ service.name }} status | cibere.dev</title>
+        <style>
+            body {
+                background-color: black;
+                color: white;
+            }
+        
+            .container {
+                text-align: center;
+            }
+        
+            .title {
+                font-size: 20px;
+                font-weight: bold;
+            }
+
+            .status {
+                padding: 30px;
+                border-radius: 10px;
+                border-color: white;
+                color: black;
+                width: 20%;
+                margin: auto;
+            }
+
+            .online {
+                background-color: green;
+            }
+
+            .offline {
+                background-color: red;
+            }
+        
+            a {
+                text-decoration: none;
+                color: inherit
+            }
+
+            button {
+                padding: 10px;
+                border-radius: 10px;
+                border-color: white;
+                width: 10vw;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <h1>Service {{ service.name }}</h1>
+            <p>{{ service.description }}</p>
+            <br>
+            {% if service.online %}
+
+                <p class="status online">
+                    Online
+                </p>
+
+            {% else %}
+
+                <p class="status offline">
+                    Offline for {{ service.offline_since }}
+                </p>
+
+            {% endif %}
+            <br>
+
+            {% for link in service.links %}
+                <a href="{{ link.url }}"><button style="background-color: {{ link.color }}">{{ link.name }}</button></a>
+            {% endfor %}
+        </div>
+    </body>
+</html>

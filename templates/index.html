@@ -27,6 +27,10 @@
                 font-size: 20px;
                 font-weight: bold;
             }
+            a {
+                text-decoration: none;
+                color: inherit
+            }
         </style>
     </head>
 
@@ -39,14 +43,18 @@
                     {% if service.online %}
                     
                         <div class="service online">
-                            <p class="title">{{ service.name }}</p>
-                            <p>Online</p>
+                            <a href="/{{ service.name }}">
+                                <p class="title">{{ service.name }}</p>
+                                <p>Online</p>
+                            </a>
 
                     {% else %}
 
                         <div class="service offline">
-                            <p class="title">{{ service.name }}</p>
-                            <p>Offline for {{ service.offline_since }}</p>
+                            <a href="/{{ service.name }}">
+                                <p class="title">{{ service.name }}</p>
+                                <p>Offline for {{ service.offline_since }}</p>
+                            </a>
 
                     {% endif %}
 

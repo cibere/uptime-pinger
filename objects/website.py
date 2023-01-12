@@ -3,9 +3,10 @@ from __future__ import annotations
 import asyncio
 import datetime
 import logging
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 
 import aiohttp
+from typing_extensions import TypedDict
 
 from time_to_human import human_timedelta
 
@@ -15,15 +16,34 @@ if TYPE_CHECKING:
 logger = logging.getLogger("uptime")
 
 
+class WebsiteLink(TypedDict):
+    name: str
+    url: str
+    color: Optional[str]
+
+
+class Link:
+    def __init__(self, name: str, url: str, color: Optional[str] = None) -> None:
+        self.name = name
+        self.url = url
+        self.color = color or "gray"
+
+
 class Website:
+    links: list[Link]
+
     def __init__(
         self,
         name: str,
+        *,
+        description: str,
         url: str,
         wait: int,
         webhook_url: str,
         ignore_ssl: bool,
         _config: Config,
+        links: list[WebsiteLink],
+        hidden: bool,
     ):
         self.name = name
         self.url = url
@@ -32,8 +52,11 @@ class Website:
         self.webhook_url = webhook_url
         self.ignore_ssl = ignore_ssl
         self._config = _config
+        self.description = description
+        self.hidden = hidden
 
         self.time: datetime.datetime = None  # type: ignore
+        self.links = [Link(**x) for x in links]
 
     @property
     def offline_since(self) -> str:
