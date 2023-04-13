@@ -1,13 +1,10 @@
 import copy
 import json
-import logging
 from typing import Optional
 
 import errors
 
 from .website import Website
-
-logger = logging.getLogger("uptime")
 
 default_embeds = [
     {
