@@ -19,6 +19,8 @@ default_embeds = [
     },
 ]
 
+__all__ = ("Config",)
+
 
 class Config:
     websites: list[Website]

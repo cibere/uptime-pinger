@@ -15,6 +15,8 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger("uptime")
 
+__all__ = ("WebsiteLink", "Link", "Website")
+
 
 class WebsiteLink(TypedDict):
     name: str

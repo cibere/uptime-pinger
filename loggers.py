@@ -1,6 +1,8 @@
 import logging
 import logging.handlers
 
+__all__ = ("setup_logging",)
+
 
 def setup_logging():
     logger = logging.getLogger("uptime")
