@@ -27,6 +27,8 @@ class Config:
     timeout: int
     webhook_url: Optional[str]
     often: Optional[int]
+    port: int
+    host: str
 
     def __init__(self):
         self.websites = []
@@ -88,6 +90,8 @@ class Config:
             self.timeout = config.get("timeout", 15)
             self.ignore_ssl = bool(config.get("ignore_ssl", False))
             self._embeds = config.get("embed_format", default_embeds)
+            self.host = config.get("host", "0.0.0.0")
+            self.port = config.get("port", 443)
 
         except FileNotFoundError:
             raise errors.ConfigNotFound()
