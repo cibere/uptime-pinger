@@ -1,7 +1,10 @@
-# This code was taken from https://github.com/Rapptz/RoboDanny
-# specifically a combination of https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/formats.py
-# and https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/time.py
-# and ofc I removed stuff I don't need
+"""
+This file is licensed under MPL-2.0
+
+This code was taken from https://github.com/Rapptz/RoboDanny
+specifically a combination of https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/formats.py
+and https://github.com/Rapptz/RoboDanny/blob/rewrite/cogs/utils/time.py
+"""
 
 from __future__ import annotations
 
@@ -9,6 +12,8 @@ import datetime
 from typing import Sequence
 
 from dateutil.relativedelta import relativedelta
+
+__all__ = ("plural", "human_join", "human_timedelta")
 
 
 class plural:
