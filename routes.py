@@ -8,7 +8,7 @@ __all__ = ("ROUTES",)
 
 async def index_callback(req: Request):
     return req.app.templates.TemplateResponse(
-        "index.html", {"request": req, "services": req.app.config.websites}
+        "index.jinja", {"request": req, "services": req.app.config.websites}
     )
 
 
@@ -20,7 +20,7 @@ async def get_website_callback(req: Request):
         return Response(status_code=404)
 
     return req.app.templates.TemplateResponse(
-        "service.html", {"request": req, "service": website}
+        "service.jinja", {"request": req, "service": website}
     )
 
 
