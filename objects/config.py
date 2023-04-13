@@ -74,7 +74,7 @@ class Config:
                     ignore_ssl=ignore_ssl,
                     _config=self,
                     links=links,
-                    description=website["description"],
+                    description=website.get("description", ""),
                     hidden=hidden,
                 )
             )
@@ -96,8 +96,8 @@ class Config:
             self.title = config.get("title", "Uptime Checker")
 
         except FileNotFoundError:
-            raise errors.ConfigNotFound()
+            raise errors.ConfigNotFound() from None
         except (json.decoder.JSONDecodeError, KeyError):
-            raise errors.UnknownConfigFormat(config)  # type: ignore
+            raise errors.UnknownConfigFormat() from None  # type: ignore
         if self._raw_websites:
             self.reload_website_cache()

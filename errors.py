@@ -22,12 +22,11 @@ class ConfigNotFound(ConfigException):
 
 
 class UnknownConfigFormat(ConfigException):
-    def __init__(self, old):
+    def __init__(self):
         super().__init__(
             _type="UnknownConfigFormat",
             message="Your configuration file's format is unknown.",
         )
-        self.old = old
 
 
 class UnknownEmbedType(ConfigException):
