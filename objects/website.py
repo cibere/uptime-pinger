@@ -74,17 +74,19 @@ class Website:
                 text = await raw.read()
                 up = True
             except Exception as e:
-                logger.info(f"{self.name} is offline (could not connect): {e}")
+                logger.info(f"{self.name} is offline. Reason: could not connect ({e})")
                 up = False
                 text = ""
 
             if up is True:
                 if str(text) == "b'Pong!'":
                     up = True
-                    logger.info(f"online")
+                    logger.info(f"{self.name} is online")
                 else:
                     up = False
-                    logger.info(f"offline (does not display 'Pong!')")
+                    logger.info(
+                        f"{self.name} is offline. Reason: does not display 'Pong!'"
+                    )
 
             send = False
             if not self.online and up is True:
@@ -114,6 +116,6 @@ class Website:
                     logger.debug(f"Payload Recieved: {await x.json()}")
                 except aiohttp.ContentTypeError:
                     pass
-                logger.info(f"Send Report with code: {x.status}")
+                logger.info(f"Send Report for {self.name}. Received code: {x.status}")
 
             await asyncio.sleep(self.wait)
