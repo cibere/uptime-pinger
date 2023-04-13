@@ -1,11 +1,19 @@
-class BaseException(Exception):
+__all__ = (
+    "ConfigException",
+    "ConfigNotFound",
+    "UnknownConfigFormat",
+    "UnknownEmbedType",
+)
+
+
+class ConfigException(Exception):
     def __init__(self, _type: str, message: str):
         self.msg = f"{_type}: {message}"
         self.type = _type
         super().__init__(self.msg)
 
 
-class ConfigNotFound(BaseException):
+class ConfigNotFound(ConfigException):
     def __init__(self):
         super().__init__(
             _type="ConfigNotFound",
@@ -13,7 +21,7 @@ class ConfigNotFound(BaseException):
         )
 
 
-class UnknownConfigFormat(BaseException):
+class UnknownConfigFormat(ConfigException):
     def __init__(self, old):
         super().__init__(
             _type="UnknownConfigFormat",
@@ -22,7 +30,7 @@ class UnknownConfigFormat(BaseException):
         self.old = old
 
 
-class UnknownEmbedType(BaseException):
+class UnknownEmbedType(ConfigException):
     def __init__(self, _type):
         super().__init__(
             _type="UnknownEmbedType", message=f"Unknown Embed Type '{_type}'"
