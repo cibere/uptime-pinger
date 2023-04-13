@@ -1,69 +1,23 @@
-import asyncio
-
-from aiohttp import ClientSession, ClientTimeout
-from starlette.applications import Starlette
-from starlette.requests import Request
-from starlette.responses import Response
-from starlette.templating import Jinja2Templates
+import sys
 
 from loggers import setup_logging
-from objects.config import Config
-from objects.website import Website
+from objects.app import App
+from routes import ROUTES
 
-
-class App(Starlette):
-    session: ClientSession
-    loop: asyncio.AbstractEventLoop
-
-    logs = setup_logging()
-    config = Config()
-    templates = Jinja2Templates(directory="templates")
-    cache: dict[str, Website] = {}
-
-
-app = App()
+app = App(routes=ROUTES)
 app.config.reload_config()
 
 
-@app.route("/")
-async def route_index(req: Request):
-    return app.templates.TemplateResponse(
-        "index.html", {"request": req, "services": app.config.websites}
-    )
-
-
-@app.route("/{website:str}", methods=["GET"])
-async def route_get_website(req: Request):
-    websitename = req.path_params["website"]
-    website = app.cache.get(websitename)
-
-    if not website:
-        return Response(status_code=404)
-
-    return app.templates.TemplateResponse(
-        "service.html", {"request": req, "service": website}
-    )
-
-
-@app.on_event("startup")
-async def on_startup():
-    timeout = ClientTimeout(total=app.config.timeout)
-    app.session = ClientSession(timeout=timeout)
-    app.loop = asyncio.get_running_loop()
-
-    for website in app.config.websites:
-        if not website.hidden:
-            app.cache[website.name] = website
-        app.loop.create_task(website.start(app.session))
-
-
-@app.on_event("shutdown")
-async def on_shutdown():
-    if getattr(app, "session", None):
-        await app.session.close()
-
-
 if __name__ == "__main__":
+    debug = False
+    try:
+        if sys.argv[1] == "--debug":
+            debug = True
+    except IndexError:
+        pass
+
+    setup_logging(debug)
+
     import uvicorn
 
-    uvicorn.run(app)
+    uvicorn.run(app, host=app.config.host, port=app.config.port)
