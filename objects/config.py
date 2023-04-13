@@ -29,6 +29,7 @@ class Config:
     often: Optional[int]
     port: int
     host: str
+    title: str
 
     def __init__(self):
         self.websites = []
@@ -92,6 +93,7 @@ class Config:
             self._embeds = config.get("embed_format", default_embeds)
             self.host = config.get("host", "0.0.0.0")
             self.port = config.get("port", 443)
+            self.title = config.get("title", "Uptime Checker")
 
         except FileNotFoundError:
             raise errors.ConfigNotFound()

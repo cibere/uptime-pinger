@@ -11,7 +11,12 @@ __all__ = ("ROUTES",)
 
 async def index_callback(req: Request):
     return req.app.templates.TemplateResponse(
-        "index.jinja", {"request": req, "services": req.app.config.websites}
+        "index.jinja",
+        {
+            "request": req,
+            "services": req.app.config.websites,
+            "title": req.app.config.title,
+        },
     )
 
 

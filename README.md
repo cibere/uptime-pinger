@@ -15,6 +15,7 @@ Simply fill the config.json file, install the requirements, and run the `main.py
 {
   "host": "127.0.0.1", // the host ip/domain to listen for. Defaults to 0.0.0.0
   "port": 8080, // the port to listen for. Defaults to 443
+  "title": "...", // title that is shown on the index page
   "webhook_url": "...", // the global webhook_url to send updates to.
   "ignore_ssl": "True", // takes a bool, wether to ignore_ssl or not
   "timeout": 30, // timeout max amount of time the script will wait for a website to load before marking it as offline
