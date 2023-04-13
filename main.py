@@ -57,6 +57,12 @@ async def on_startup():
         app.loop.create_task(website.start(app.session))
 
 
+@app.on_event("shutdown")
+async def on_shutdown():
+    if getattr(app, "session", None):
+        await app.session.close()
+
+
 if __name__ == "__main__":
     import uvicorn
 
