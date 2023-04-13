@@ -53,14 +53,14 @@
             <br>
             {% if service.online %}
 
-                <p class="status online">
+                <p class="status online" id="status">
                     Online
                 </p>
 
             {% else %}
 
-                <p class="status offline">
-                    Offline for {{ service.offline_since }}
+                <p class="status offline" id="status">
+                    Offline for
                 </p>
 
             {% endif %}
@@ -72,6 +72,20 @@
         </div>
     </body>
     <script>
-        var timeElement = document.getElementById('')
+        const url = `${window.location.href}/ws`.replace("http://", "ws://").replace("https://", "ws://");
+        console.log(url);
+        var ws = new WebSocket(url);
+        var timeElement = document.getElementById('status');
+
+        ws.onmessage = function(event) {
+            if (event.data === "an unknown amount of time") {
+                timeElement.className = 'status online';
+                timeElement.innerText = `Online`
+            } else {
+                timeElement.className = 'status offline';
+                timeElement.innerText = `Offline for ${event.data}`;
+            }
+        };
+        ws.send('test');
     </script>
 </html>

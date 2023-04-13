@@ -1,7 +1,10 @@
-from starlette.responses import PlainTextResponse, Response
-from starlette.routing import Route
+import asyncio
 
-from objects.app import Request
+from starlette.endpoints import WebSocketEndpoint
+from starlette.responses import PlainTextResponse, Response
+from starlette.routing import Route, WebSocketRoute
+
+from objects.app import Request, WebSocket
 
 __all__ = ("ROUTES",)
 
@@ -34,12 +37,31 @@ async def get_website_offline_since_callback(req: Request):
     return PlainTextResponse(website.offline_since)
 
 
+class WebsocketStatus(WebSocketEndpoint):
+    encoding = "text"
+
+    async def on_connect(self, ws: WebSocket):
+        await ws.accept()
+        websitename = ws.path_params["website"]
+        website = ws.app.cache.get(websitename)
+        if website is None:
+            await ws.send_text("404, unknown website")
+            return await ws.close()
+
+        while 1:
+            if getattr(ws, "IS_CLOSED", False):
+                return
+
+            await ws.send_text(website.offline_since)
+            print("sent update through ws")
+            await asyncio.sleep(3)
+
+    async def on_disconnect(self, ws: WebSocket, close_code):
+        setattr(ws, "IS_CLOSED", True)
+
+
 ROUTES = [
     Route("/", index_callback, methods=["GET"]),
     Route("/{website:str}", get_website_callback, methods=["GET"]),
-    Route(
-        "/{website:str}/offline_since",
-        get_website_offline_since_callback,
-        methods=["GET"],
-    ),
+    WebSocketRoute("/{website:str}/ws", WebsocketStatus),
 ]

@@ -7,14 +7,12 @@ from starlette.applications import Starlette
 from starlette.requests import Request as _Request
 from starlette.routing import Mount, Route
 from starlette.templating import Jinja2Templates
+from starlette.websockets import WebSocket as _WebSocket
 
 from objects.config import Config
 from objects.website import Website
 
-__all__ = (
-    "App",
-    "Request",
-)
+__all__ = ("App", "Request", "WebSocket")
 
 
 class App(Starlette):
@@ -46,4 +44,8 @@ class App(Starlette):
 
 
 class Request(_Request):
+    app: App
+
+
+class WebSocket(_WebSocket):
     app: App
