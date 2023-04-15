@@ -6,22 +6,16 @@ import logging
 from typing import TYPE_CHECKING, Optional
 
 import aiohttp
-from typing_extensions import TypedDict
 
 from time_to_human import human_timedelta
 
 if TYPE_CHECKING:
+    from ..types.website import WebsiteLink
     from .config import Config
 
 logger = logging.getLogger("uptime")
 
-__all__ = ("WebsiteLink", "Link", "Website")
-
-
-class WebsiteLink(TypedDict):
-    name: str
-    url: str
-    color: Optional[str]
+__all__ = ("Link", "Website")
 
 
 class Link:
