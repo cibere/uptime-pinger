@@ -30,6 +30,7 @@ class Config:
     port: int
     host: str
     title: str
+    online_text: str | None
 
     def __init__(self):
         self.websites = []
@@ -64,6 +65,7 @@ class Config:
                 hidden = bool(website["hidden"])
             except (KeyError, ValueError):
                 hidden = False
+            online_text = website.get("online_text", self.online_text) or None
 
             websites.append(
                 Website(
@@ -76,6 +78,7 @@ class Config:
                     links=links,
                     description=website.get("description", ""),
                     hidden=hidden,
+                    online_text=online_text,
                 )
             )
         self.websites = websites
@@ -94,6 +97,7 @@ class Config:
             self.host = config.get("host", "0.0.0.0")
             self.port = config.get("port", 443)
             self.title = config.get("title", "Uptime Checker")
+            self.online_text = config.get("online_text") or None
 
         except FileNotFoundError:
             raise errors.ConfigNotFound() from None

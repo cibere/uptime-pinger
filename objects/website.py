@@ -46,6 +46,7 @@ class Website:
         _config: Config,
         links: list[WebsiteLink],
         hidden: bool,
+        online_text: str | None,
     ):
         self.name = name
         self.url = url
@@ -56,6 +57,7 @@ class Website:
         self._config = _config
         self.description = description
         self.hidden = hidden
+        self.online_text = online_text
 
         self.time: datetime.datetime = None  # type: ignore
         self.links = [Link(**x) for x in links]
@@ -74,6 +76,7 @@ class Website:
             try:
                 raw = await session.get(self.url, ssl=self.ignore_ssl)
                 text = await raw.read()
+                text = text.decode()
                 up = True
             except Exception as e:
                 logger.info(f"{self.name} is offline. Reason: could not connect ({e})")
@@ -81,14 +84,15 @@ class Website:
                 text = ""
 
             if up is True:
-                if str(text) == "b'Pong!'":
+                if text == self.online_text:
                     up = True
                     logger.info(f"{self.name} is online")
                 else:
-                    up = False
-                    logger.info(
-                        f"{self.name} is offline. Reason: does not display 'Pong!'"
-                    )
+                    if self.online_text is not None:
+                        up = False
+                        logger.info(
+                            f"{self.name} is offline. Reason: does not display {self.online_text!r}"
+                        )
 
             send = False
             if not self.online and up is True:
