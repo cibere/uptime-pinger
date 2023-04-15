@@ -3,9 +3,16 @@
 This is just something that I use, and I do not support self-use.
 Feel free to make a PR if you find any flaws or have any improvements.
 
-# How to use
+# How to install
 
-Simply fill the config.json file, install the requirements, and run the `main.py` file.
+1. Fill out `config.json`. You can see how to fill it out [here](#how-to-fill-config)
+2. Install the requirements, which we recommend to do in a [venv](https://docs.python.org/3/library/venv.html). This can by done with
+
+```
+pip install -r requirements.txt
+```
+
+3. Start the program. This can be done with `your_python_executable main.py` (replacing `your_python_executable` with your python executable. Some common ones include: `py`, `python`, `python3`)
 
 # How to fill config
 
