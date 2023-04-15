@@ -50,11 +50,11 @@ class Config:
         for website in self._raw_websites:
             try:
                 wait = int(website["wait"])
-            except:
+            except (KeyError, ValueError):
                 wait = int(self.often)  # type: ignore
             try:
                 ignore_ssl = bool(website["ignore_ssl"])
-            except:
+            except (KeyError, ValueError):
                 ignore_ssl = self.ignore_ssl
             try:
                 links = website["links"]
@@ -62,7 +62,7 @@ class Config:
                 links = []
             try:
                 hidden = bool(website["hidden"])
-            except KeyError or ValueError:
+            except (KeyError, ValueError):
                 hidden = False
 
             websites.append(
