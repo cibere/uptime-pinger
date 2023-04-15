@@ -17,4 +17,5 @@ six
 sniffio
 starlette
 uvicorn
+websockets
 yarl
