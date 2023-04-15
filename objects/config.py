@@ -98,6 +98,6 @@ class Config:
         except FileNotFoundError:
             raise errors.ConfigNotFound() from None
         except (json.decoder.JSONDecodeError, KeyError):
-            raise errors.UnknownConfigFormat() from None  # type: ignore
+            raise errors.UnknownConfigFormat() from None
         if self._raw_websites:
             self.reload_website_cache()
