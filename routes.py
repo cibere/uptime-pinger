@@ -3,6 +3,11 @@ import asyncio
 from starlette.endpoints import WebSocketEndpoint
 from starlette.responses import PlainTextResponse, Response
 from starlette.routing import Route, WebSocketRoute
+from websockets.exceptions import (
+    ConnectionClosed,
+    ConnectionClosedError,
+    ConnectionClosedOK,
+)
 
 from objects.app import Request, WebSocket
 
@@ -54,15 +59,11 @@ class WebsocketStatus(WebSocketEndpoint):
             return await ws.close()
 
         while 1:
-            if getattr(ws, "IS_CLOSED", False):
+            try:
+                await ws.send_text(website.offline_since)
+            except (ConnectionClosedOK, ConnectionClosedError, ConnectionClosed):
                 return
-
-            await ws.send_text(website.offline_since)
-            print("sent update through ws")
             await asyncio.sleep(3)
-
-    async def on_disconnect(self, ws: WebSocket, close_code):
-        setattr(ws, "IS_CLOSED", True)
 
 
 ROUTES = [
